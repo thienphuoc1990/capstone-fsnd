@@ -5,7 +5,7 @@ from jose import jwt
 from urllib.request import urlopen
 
 
-AUTH0_DOMAIN = 'phuoc-fsnd-casting-agency.us.auth0.com'
+AUTH0_DOMAIN = 'phuoc-uda-fwd-cd0039-cffs.us.auth0.com'
 ALGORITHMS = ['RS256']
 API_AUDIENCE = 'https://uda-fwd-cd0039-cffs/api'
 
