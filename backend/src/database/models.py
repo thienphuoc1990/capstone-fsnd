@@ -4,7 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import json
 
-database_path = os.environ['DATABASE_PATH']
 db = SQLAlchemy()
 migrate = Migrate()
 
@@ -14,15 +13,16 @@ setup_db(app)
 '''
 
 
-def setup_db(app, database_path=database_path):
+def setup_db(app, database_path=None):
+    if database_path is None:
+        database_path = os.environ['DATABASE_PATH']
+
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
     migrate.init_app(app, db)
-    
-    with app.app_context():
-        db.create_all()
+    db.create_all()
     
 
 '''
