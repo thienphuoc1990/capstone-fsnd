@@ -68,7 +68,7 @@ def define_actor_routes(app):
 
             return jsonify({
                 'success': True,
-                'actors': [actor.short() for actor in actors],
+                'data': [actor.short() for actor in actors],
             })
         except HTTPException as e:
             raise e
@@ -96,7 +96,7 @@ def define_actor_routes(app):
 
             return jsonify({
                 'success': True,
-                'actors': actor.long(),
+                'data': actor.long(),
             })
         except HTTPException as e:
             raise e
@@ -140,7 +140,7 @@ def define_actor_routes(app):
 
             return jsonify({
                 'success': True,
-                'actors': [actor.long()],
+                'data': [actor.long()],
             })
         except HTTPException as e:
             raise e
@@ -185,7 +185,7 @@ def define_actor_routes(app):
 
             return jsonify({
                 'success': True,
-                'actors': [actor.long()],
+                'data': [actor.long()],
             })
         except HTTPException as e:
             raise e
@@ -246,7 +246,7 @@ def define_movie_routes(app):
 
             return jsonify({
                 'success': True,
-                'movies': [movie.short() for movie in movies],
+                'data': [movie.short() for movie in movies],
             })
         except HTTPException as e:
             raise e
@@ -274,7 +274,7 @@ def define_movie_routes(app):
 
             return jsonify({
                 'success': True,
-                'movies': movie.long(),
+                'data': movie.long(),
             })
         except HTTPException as e:
             raise e
@@ -316,7 +316,7 @@ def define_movie_routes(app):
 
             return jsonify({
                 'success': True,
-                'movies': [movie.long()],
+                'data': [movie.long()],
             })
         except HTTPException as e:
             raise e
@@ -358,7 +358,7 @@ def define_movie_routes(app):
 
             return jsonify({
                 'success': True,
-                'movies': [movie.long()],
+                'data': [movie.long()],
             })
         except HTTPException as e:
             raise e
