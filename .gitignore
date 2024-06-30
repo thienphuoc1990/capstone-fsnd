@@ -5,6 +5,7 @@ test.db
 .env
 node_modules/
 .angular
+dist/
 
 # OS generated files #
 ######################
