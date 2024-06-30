@@ -47,6 +47,13 @@ flask run --reload
 ```
 
 The `--reload` flag will detect file changes and restart the server automatically.
+The local site will be served at localhost:5000
+
+Or run with gunicorn:
+```bash
+   gunicorn run:app
+```
+The local site will be served at localhost:8000
 
 ## Setup Auth0 and Database
 
@@ -91,14 +98,13 @@ The `--reload` flag will detect file changes and restart the server automaticall
    - Sign into each account and make note of the JWT.
    - Import the postman collection `./backend/udacity-fsnd-capstone.postman_collection.json`
    - Right-clicking the collection folder for barista and manager, navigate to the authorization tab, and including the JWT in the token field (you should have noted these JWTs).
-   - Run the collection and correct any errors.
-   - Export the collection overwriting the one we've included so that we have your proper JWTs during review!
+   - If run with gunicon, you will need to update host from localhost:5000 to localhost:8000
 
 ### Setup DB and dummy data
 
 #### Local running
 - In the project root folder, run `docker-compose up -d` for start postgresql with docker.
-- Copy file .env.example to .en
+- Copy file .env.example to .env
 
 #### DB and dummy data
 - Run these commands to initial and migrate DB
