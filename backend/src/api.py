@@ -6,7 +6,7 @@ from flask_cors import CORS
 from werkzeug.exceptions import HTTPException
 import traceback
 
-from .database.models import setup_db, Drink
+from .database.models import setup_db, Actor
 from .auth.auth import AuthError, requires_auth
 
 def create_app(db_uri="", test_config=None):
@@ -33,22 +33,22 @@ def configure_cors(app):
 def define_routes(app):
     '''
     @DONE implement endpoint
-        GET /drinks
+        GET /actors
             it should be a public endpoint
-            it should contain only the drink.short() data representation
-        returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
+            it should contain only the actor.short() data representation
+        returns status code 200 and json {"success": True, "actors": actors} where actors is the list of actors
             or appropriate status code indicating reason for failure
     '''
 
 
-    @app.route('/drinks', methods=['GET'])
-    def retrieve_drinks():
+    @app.route('/actors', methods=['GET'])
+    def retrieve_actors():
         try:
-            drinks = Drink.query.order_by(Drink.id).all()
+            actors = Actor.query.order_by(Actor.id).all()
 
             return jsonify({
                 'success': True,
-                'drinks': [drink.short() for drink in drinks],
+                'actors': [actor.short() for actor in actors],
             })
         except HTTPException as e:
             raise e
@@ -60,23 +60,23 @@ def define_routes(app):
 
     '''
     @DONE implement endpoint
-        GET /drinks-detail
-            it should require the 'get:drinks-detail' permission
-            it should contain the drink.long() data representation
-        returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
+        GET /actors-detail
+            it should require the 'get:actors-detail' permission
+            it should contain the actor.long() data representation
+        returns status code 200 and json {"success": True, "actors": actors} where actors is the list of actors
             or appropriate status code indicating reason for failure
     '''
 
 
-    @app.route('/drinks-detail', methods=['GET'])
-    @requires_auth('get:drinks-detail')
-    def retrieve_drinks_detail(payload):
+    @app.route('/actors-detail', methods=['GET'])
+    @requires_auth('get:actors-detail')
+    def retrieve_actors_detail(payload):
         try:
-            drinks = Drink.query.order_by(Drink.id).all()
+            actors = Actor.query.order_by(Actor.id).all()
 
             return jsonify({
                 'success': True,
-                'drinks': [drink.long() for drink in drinks],
+                'actors': [actor.long() for actor in actors],
             })
         except HTTPException as e:
             raise e
@@ -88,18 +88,18 @@ def define_routes(app):
 
     '''
     @DONE implement endpoint
-        POST /drinks
-            it should create a new row in the drinks table
-            it should require the 'post:drinks' permission
-            it should contain the drink.long() data representation
-        returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the newly created drink
+        POST /actors
+            it should create a new row in the actors table
+            it should require the 'post:actors' permission
+            it should contain the actor.long() data representation
+        returns status code 200 and json {"success": True, "actors": actor} where actor an array containing only the newly created actor
             or appropriate status code indicating reason for failure
     '''
 
 
-    @app.route('/drinks', methods=['POST'])
-    @requires_auth('post:drinks')
-    def create_new_row_in_drink(payload):
+    @app.route('/actors', methods=['POST'])
+    @requires_auth('post:actors')
+    def create_new_row_in_actor(payload):
         try:
             body = request.get_json()
 
@@ -109,16 +109,16 @@ def define_routes(app):
             if title is None or recipe is None:
                 abort(422)
 
-            drink = Drink(
+            actor = Actor(
                 title=title,
                 recipe=json.dumps(recipe)
             )
 
-            drink.insert()
+            actor.insert()
 
             return jsonify({
                 'success': True,
-                'drinks': [drink.long()],
+                'actors': [actor.long()],
             })
         except HTTPException as e:
             raise e
@@ -130,41 +130,41 @@ def define_routes(app):
 
     '''
     @DONE implement endpoint
-        PATCH /drinks/<id>
+        PATCH /actors/<id>
             where <id> is the existing model id
             it should respond with a 404 error if <id> is not found
             it should update the corresponding row for <id>
-            it should require the 'patch:drinks' permission
-            it should contain the drink.long() data representation
-        returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the updated drink
+            it should require the 'patch:actors' permission
+            it should contain the actor.long() data representation
+        returns status code 200 and json {"success": True, "actors": actor} where actor an array containing only the updated actor
             or appropriate status code indicating reason for failure
     '''
 
 
-    @app.route('/drinks/<int:id>', methods=['PATCH'])
-    @requires_auth('patch:drinks')
-    def update_drink(payload, id):
+    @app.route('/actors/<int:id>', methods=['PATCH'])
+    @requires_auth('patch:actors')
+    def update_actor(payload, id):
         try:
             body = request.get_json()
 
             new_title = body.get('title', None)
             new_recipe = body.get('recipe', None)
 
-            drink = Drink.query.filter_by(id=id).one_or_none()
+            actor = Actor.query.filter_by(id=id).one_or_none()
 
-            if drink is None:
+            if actor is None:
                 raise (404)
 
             if new_title:
-                drink.title = new_title
+                actor.title = new_title
             if new_recipe:
-                drink.recipe = json.dumps(new_recipe)
+                actor.recipe = json.dumps(new_recipe)
 
-            drink.update()
+            actor.update()
 
             return jsonify({
                 'success': True,
-                'drinks': [drink.long()],
+                'actors': [actor.long()],
             })
         except HTTPException as e:
             raise e
@@ -176,26 +176,26 @@ def define_routes(app):
 
     '''
     @DONE implement endpoint
-        DELETE /drinks/<id>
+        DELETE /actors/<id>
             where <id> is the existing model id
             it should respond with a 404 error if <id> is not found
             it should delete the corresponding row for <id>
-            it should require the 'delete:drinks' permission
+            it should require the 'delete:actors' permission
         returns status code 200 and json {"success": True, "delete": id} where id is the id of the deleted record
             or appropriate status code indicating reason for failure
     '''
 
 
-    @app.route('/drinks/<int:id>', methods=['DELETE'])
-    @requires_auth('delete:drinks')
-    def delete_drink(payload, id):
+    @app.route('/actors/<int:id>', methods=['DELETE'])
+    @requires_auth('delete:actors')
+    def delete_actor(payload, id):
         try:
-            drink = Drink.query.filter(Drink.id == id).one_or_none()
+            actor = Actor.query.filter(Actor.id == id).one_or_none()
 
-            if drink is None:
+            if actor is None:
                 abort(404)
 
-            drink.delete()
+            actor.delete()
 
             return jsonify({
                 'success': True,

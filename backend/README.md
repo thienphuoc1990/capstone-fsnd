@@ -32,12 +32,12 @@ This will install all of the required packages we selected within the `requireme
 
 ## Running the server
 
-From within the `./src` directory first ensure you are working using your created virtual environment.
+From within the backend directory first ensure you are working using your created virtual environment.
 
 Each time you open a new terminal session, run:
 
 ```bash
-export FLASK_APP=api.py;
+export FLASK_APP=run.py;
 ```
 
 To run the server, execute:
@@ -48,7 +48,7 @@ flask run --reload
 
 The `--reload` flag will detect file changes and restart the server automatically.
 
-## Tasks
+## Setup Auth0 and Database
 
 ### Setup Auth0
 
@@ -79,9 +79,24 @@ The `--reload` flag will detect file changes and restart the server automaticall
    - Run the collection and correct any errors.
    - Export the collection overwriting the one we've included so that we have your proper JWTs during review!
 
-### Implement The Server
+### Setup DB and dummy data
 
-There are `@TODO` comments throughout the `./backend/src`. We recommend tackling the files in order and from top to bottom:
+#### Local running
+- In the project root folder, run `docker-compose up -d` for start postgresql with docker.
+- Copy file .env.example to .en
 
-1. `./src/auth/auth.py`
-2. `./src/api.py`
+#### DB and dummy data
+- Run these commands to initial and migrate DB
+``` bash
+   flask db init
+   flask db migrate
+   flask db upgrade
+```
+- Run these commands to have dummy data
+``` bash
+   flask shell
+   from src.database.helper import DataHelper
+   DataHelper.add_dummy_actor_data()
+   DataHelper.add_dummy_movie_data()
+   exit()
+```

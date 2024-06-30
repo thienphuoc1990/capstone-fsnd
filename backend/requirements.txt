@@ -28,3 +28,4 @@ wrapt==1.11.1
 zipp==3.19.2
 python-dotenv
 psycopg2-binary==2.8.2
+Flask-Migrate==4.0.7
