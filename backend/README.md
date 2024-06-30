@@ -60,21 +60,36 @@ The `--reload` flag will detect file changes and restart the server automaticall
      - Enable RBAC
      - Enable Add Permissions in the Access Token
 5. Create new API permissions:
-   - `get:drinks`
-   - `get:drinks-detail`
-   - `post:drinks`
-   - `patch:drinks`
-   - `delete:drinks`
+   - `get:actors`
+   - `get:actors-detail`
+   - `post:actors`
+   - `patch:actors`
+   - `delete:actors`
+   - `get:movies`
+   - `get:movies-detail`
+   - `post:movies`
+   - `patch:movies`
+   - `delete:movies`
 6. Create new roles for:
-   - Barista
-     - can `get:drinks-detail`
-     - can `get:drinks`
-   - Manager
-     - can perform all actions
+   - Casting Assistant
+     - can `get:actors`
+     - can `get:actors-detail`
+     - can `get:movies`
+     - can `get:movies-detail`
+   - Casting Director
+     - All Casting Assistant can do
+     - can `post:actors`
+     - can `patch:actors`
+     - can `delete:actors`
+     - can `patch:movies`
+   - Executive Producer
+     - All Casting Director can do
+     - can `post:movies`
+     - can `delete:movies`
 7. Test your endpoints with [Postman](https://getpostman.com).
-   - Register 2 users - assign the Barista role to one and Manager role to the other.
+   - Register 3 users - assign the Barista role to one and Manager role to the other.
    - Sign into each account and make note of the JWT.
-   - Import the postman collection `./starter_code/backend/udacity-fsnd-udaspicelatte.postman_collection.json`
+   - Import the postman collection `./backend/udacity-fsnd-capstone.postman_collection.json`
    - Right-clicking the collection folder for barista and manager, navigate to the authorization tab, and including the JWT in the token field (you should have noted these JWTs).
    - Run the collection and correct any errors.
    - Export the collection overwriting the one we've included so that we have your proper JWTs during review!

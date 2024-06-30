@@ -61,8 +61,8 @@ def define_actor_routes(app):
 
 
     @app.route('/actors', methods=['GET'])
-    # @requires_auth('get:actors')
-    def retrieve_actors():
+    @requires_auth('get:actors')
+    def retrieve_actors(payload):
         try:
             actors = Actor.query.order_by(Actor.id).all()
 
@@ -89,8 +89,8 @@ def define_actor_routes(app):
 
 
     @app.route('/actors/<int:id>', methods=['GET'])
-    # @requires_auth('get:actors-detail')
-    def retrieve_actors_detail(id):
+    @requires_auth('get:actors-detail')
+    def retrieve_actors_detail(payload, id):
         try:
             actor = Actor.query.get_or_404(id)
 
@@ -118,8 +118,8 @@ def define_actor_routes(app):
 
 
     @app.route('/actors', methods=['POST'])
-    # @requires_auth('post:actors')
-    def create_new_row_in_actor():
+    @requires_auth('post:actors')
+    def create_new_row_in_actor(payload):
         try:
             body = request.get_json()
 
@@ -164,8 +164,8 @@ def define_actor_routes(app):
 
 
     @app.route('/actors/<int:id>', methods=['PATCH'])
-    # @requires_auth('patch:actors')
-    def update_actor(id):
+    @requires_auth('patch:actors')
+    def update_actor(payload, id):
         try:
             actor = Actor.query.get_or_404(id)
             body = request.get_json()
@@ -208,8 +208,8 @@ def define_actor_routes(app):
 
 
     @app.route('/actors/<int:id>', methods=['DELETE'])
-    # @requires_auth('delete:actors')
-    def delete_actor(id):
+    @requires_auth('delete:actors')
+    def delete_actor(payload, id):
         try:
             actor = Actor.query.get_or_404(id)
 
@@ -239,8 +239,8 @@ def define_movie_routes(app):
 
 
     @app.route('/movies', methods=['GET'])
-    # @requires_auth('get:movies')
-    def retrieve_movies():
+    @requires_auth('get:movies')
+    def retrieve_movies(payload):
         try:
             movies = Movie.query.order_by(Movie.id).all()
 
@@ -267,8 +267,8 @@ def define_movie_routes(app):
 
 
     @app.route('/movies/<int:id>', methods=['GET'])
-    # @requires_auth('get:movies-detail')
-    def retrieve_movies_detail(id):
+    @requires_auth('get:movies-detail')
+    def retrieve_movies_detail(payload, id):
         try:
             movie = Movie.query.get_or_404(id)
 
@@ -296,8 +296,8 @@ def define_movie_routes(app):
 
 
     @app.route('/movies', methods=['POST'])
-    # @requires_auth('post:movies')
-    def create_new_row_in_movie():
+    @requires_auth('post:movies')
+    def create_new_row_in_movie(payload):
         try:
             body = request.get_json()
 
@@ -340,8 +340,8 @@ def define_movie_routes(app):
 
 
     @app.route('/movies/<int:id>', methods=['PATCH'])
-    # @requires_auth('patch:movies')
-    def update_movie(id):
+    @requires_auth('patch:movies')
+    def update_movie(payload, id):
         try:
             movie = Movie.query.get_or_404(id)
             body = request.get_json()
@@ -381,8 +381,8 @@ def define_movie_routes(app):
 
 
     @app.route('/movies/<int:id>', methods=['DELETE'])
-    # @requires_auth('delete:movies')
-    def delete_movie(id):
+    @requires_auth('delete:movies')
+    def delete_movie(payload, id):
         try:
             movie = Movie.query.get_or_404(id)
 
