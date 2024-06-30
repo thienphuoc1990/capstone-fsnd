@@ -115,3 +115,12 @@ The `--reload` flag will detect file changes and restart the server automaticall
    DataHelper.add_dummy_movie_data()
    exit()
 ```
+
+### Testing
+- Need the .env file for run testing
+- Run comment for testing
+```bash
+   python test_api.py
+```
+- Test passed
+![test_passed](./docs/test_passed.png)
