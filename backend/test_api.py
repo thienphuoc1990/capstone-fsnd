@@ -1,16 +1,17 @@
+from src.database.models import db, Actor, Movie
+from src.auth.auth import AuthError
+from src.api import create_app
+import json
+import unittest
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
-import unittest
-import json
-from src.api import create_app
-from src.auth.auth import AuthError
-from src.database.models import db, Actor, Movie
-        
+
 assistant_token = os.environ['CASTING_ASSISTANT_TOKEN']
 director_token = os.environ['CASTING_DIRECTOR_TOKEN']
 producer_token = os.environ['EXECUTIVE_PRODUCER_TOKEN']
+
 
 class ApiTestCase(unittest.TestCase):
     """This class represents the casting agency test case"""
@@ -60,9 +61,9 @@ class ApiTestCase(unittest.TestCase):
             title="Movie test delete",
             release_date="2014-04-04",
         ).insert()
-    
+
     def getUserTokenHeaders(self, token=''):
-        return { 'authorization': "Bearer " + token}     
+        return {'authorization': "Bearer " + token}
 
     """
     Write at least one test for each test for successful operation and for expected errors.
@@ -71,15 +72,21 @@ class ApiTestCase(unittest.TestCase):
     # GET /actors
     def test_get_actors(self):
         headers = self.getUserTokenHeaders(assistant_token)
-        res = self.client().get("/actors",headers=headers)
+        res = self.client().get("/actors", headers=headers)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data["success"])
         self.assertEqual(data["data"],
-            [{'age': 43, 'gender': 'male', 'id': 1, 'name': 'Christopher Robert Evans'}, 
-             {'age': 28, 'gender': 'male', 'id': 2, 'name': 'Thomas Stanley Holland'}])
-    
+                         [{'age': 43,
+                           'gender': 'male',
+                           'id': 1,
+                           'name': 'Christopher Robert Evans'},
+                          {'age': 28,
+                           'gender': 'male',
+                           'id': 2,
+                           'name': 'Thomas Stanley Holland'}])
+
     # GET /actors/:id
     def test_get_actor_detail_success(self):
         headers = self.getUserTokenHeaders(assistant_token)
@@ -89,8 +96,12 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data["success"])
         self.assertEqual(data["data"],
-            {'age': 43, 'gender': 'male', 'id': 1, 'movies': [], 'name': 'Christopher Robert Evans'})
-    
+                         {'age': 43,
+                          'gender': 'male',
+                          'id': 1,
+                          'movies': [],
+                          'name': 'Christopher Robert Evans'})
+
     def test_get_actor_detail_not_found(self):
         headers = self.getUserTokenHeaders(assistant_token)
         res = self.client().get("/actors/100", headers=headers)
@@ -98,7 +109,7 @@ class ApiTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 404)
         self.assertFalse(data["success"])
-    
+
     # POST /actors
     def test_post_actor_unauthorized(self):
         headers = self.getUserTokenHeaders(assistant_token)
@@ -113,7 +124,7 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 403)
         self.assertEqual(data["message"], 'Permission denied')
         self.assertFalse(data["success"])
-    
+
     def test_post_actor_unprocessable_entity(self):
         headers = self.getUserTokenHeaders(director_token)
         res = self.client().post("/actors", json={
@@ -126,7 +137,7 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 422)
         self.assertFalse(data["success"])
         self.assertEqual(data["message"], "unprocessable")
-        
+
     def test_post_actor_success(self):
         headers = self.getUserTokenHeaders(director_token)
         res = self.client().post("/actors", json={
@@ -180,7 +191,7 @@ class ApiTestCase(unittest.TestCase):
         headers = self.getUserTokenHeaders(director_token)
         res = self.client().delete("/actors/100", headers=headers)
         data = json.loads(res.data)
-        
+
         self.assertEqual(res.status_code, 404)
         self.assertFalse(data["success"])
         self.assertEqual(data["message"], "resource not found")
@@ -189,7 +200,7 @@ class ApiTestCase(unittest.TestCase):
         headers = self.getUserTokenHeaders(director_token)
         res = self.client().delete("/actors/3", headers=headers)
         data = json.loads(res.data)
-        
+
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data["success"])
         self.assertEqual(data["deleted"], 3)
@@ -197,15 +208,19 @@ class ApiTestCase(unittest.TestCase):
     # GET /movies
     def test_get_movies_success(self):
         headers = self.getUserTokenHeaders(assistant_token)
-        res = self.client().get("/movies",headers=headers)
+        res = self.client().get("/movies", headers=headers)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data["success"])
         self.assertEqual(data["data"],
-            [{'id': 1, 'releaseDate': 'Fri, 29 Jul 2011 00:00:00 GMT', 'title': 'Captain America: The First Avenger'},
-            {'id': 2, 'releaseDate': 'Fri, 04 Apr 2014 00:00:00 GMT', 'title': 'Marvel\'s Captain America: The Winter Soldier'}])
-    
+                         [{'id': 1,
+                           'releaseDate': 'Fri, 29 Jul 2011 00:00:00 GMT',
+                           'title': 'Captain America: The First Avenger'},
+                          {'id': 2,
+                           'releaseDate': 'Fri, 04 Apr 2014 00:00:00 GMT',
+                           'title': 'Marvel\'s Captain America: The Winter Soldier'}])
+
     # GET /movies/:id
     def test_get_movie_detail_success(self):
         headers = self.getUserTokenHeaders(assistant_token)
@@ -215,8 +230,11 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data["success"])
         self.assertEqual(data["data"],
-           {'actors': [], 'id': 1, 'releaseDate': 'Fri, 29 Jul 2011 00:00:00 GMT', 'title': 'Captain America: The First Avenger'})
-    
+                         {'actors': [],
+                          'id': 1,
+                          'releaseDate': 'Fri, 29 Jul 2011 00:00:00 GMT',
+                          'title': 'Captain America: The First Avenger'})
+
     def test_get_movie_detail_fail(self):
         headers = self.getUserTokenHeaders(assistant_token)
         res = self.client().get("/movies/100", headers=headers)
@@ -238,7 +256,7 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 403)
         self.assertEqual(data["message"], 'Permission denied')
         self.assertFalse(data["success"])
-        
+
     def test_post_movie_success(self):
         headers = self.getUserTokenHeaders(producer_token)
         res = self.client().post("/movies", json={
@@ -297,9 +315,9 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 422)
         self.assertFalse(data["success"])
         self.assertEqual(data["message"], "unprocessable")
-    
-    
+
     # DELETE /movie/<int:question_id>
+
     def test_delete_movie_unauthorized(self):
         headers = self.getUserTokenHeaders(director_token)
         res = self.client().delete("/movies/1", headers=headers)
@@ -314,7 +332,7 @@ class ApiTestCase(unittest.TestCase):
         headers = self.getUserTokenHeaders(producer_token)
         res = self.client().delete("/movies/100", headers=headers)
         data = json.loads(res.data)
-        
+
         self.assertEqual(res.status_code, 404)
         self.assertFalse(data["success"])
         self.assertEqual(data["message"], "resource not found")
@@ -323,12 +341,12 @@ class ApiTestCase(unittest.TestCase):
         headers = self.getUserTokenHeaders(producer_token)
         res = self.client().delete("/movies/3", headers=headers)
         data = json.loads(res.data)
-        
+
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data["success"])
         self.assertEqual(data["deleted"], 3)
 
-    
+
 # Make the tests conveniently executable
 if __name__ == "__main__":
     unittest.main()
