@@ -1,4 +1,4 @@
-# Coffee Shop Backend
+# Casting Agency Backend
 
 ## Getting Started
 
