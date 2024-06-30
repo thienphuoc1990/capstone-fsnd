@@ -1,0 +1,51 @@
+<div *ngIf="formMovie">
+  <h2>Details</h2>
+  <form [formGroup]="formMovie">
+    <div class="mb-3 mt-3">
+      <label class="form-label" for="movie-title">Movie title: </label>
+      <input
+        id="movie-title"
+        class="form-control"
+        formControlName="title"
+        placeholder="Movie title"
+        [ngClass]="{ 'is-invalid': submitted && f['title'].errors }"
+        [readonly]="!auth.isExecutiveProducer() && !auth.isCastingDirector()"
+      />
+      <div *ngIf="f['title'].errors" class="invalid-feedback">
+        <div *ngIf="f['title'].errors['required']">Movie title is required</div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="release-date">Release date: </label>
+      <input
+        id="release-date"
+        class="form-control"
+        formControlName="releaseDate"
+        [readonly]="!auth.isExecutiveProducer() && !auth.isCastingDirector()"
+        [ngClass]="{ 'is-invalid': submitted && f['releaseDate'].errors }"
+        type="date"
+      />
+      <div *ngIf="f['releaseDate'].errors" class="invalid-feedback">
+        <div *ngIf="f['releaseDate'].errors.required">
+          Release date is required
+        </div>
+        <div *ngIf="f['releaseDate'].errors.pattern">
+          Release date must be a valid date in the format dd-mm-yyyy
+        </div>
+      </div>
+    </div>
+    <p>Form Status: {{ formMovie.status }}</p>
+
+    <button type="button" class="btn btn-secondary me-3" (click)="goBack()">
+      go back
+    </button>
+    <button
+      class="btn btn-primary"
+      type="submit"
+      (click)="save()"
+      *ngIf="auth.isExecutiveProducer() || auth.isCastingDirector()"
+    >
+      save
+    </button>
+  </form>
+</div>

@@ -1,0 +1,67 @@
+<div *ngIf="formActor">
+  <h2>Details</h2>
+  <form [formGroup]="formActor">
+    <div class="mb-3 mt-3">
+      <label class="form-label" for="actor-name">Actor name: </label>
+      <input
+        id="actor-name"
+        class="form-control"
+        formControlName="name"
+        [ngClass]="{ 'is-invalid': submitted && f['name'].errors }"
+        placeholder="Actor name"
+        [readonly]="auth.isCastingAssistance()"
+      />
+      <div *ngIf="f['name'].errors" class="invalid-feedback">
+        <div *ngIf="f['name'].errors['required']">Actor name is required</div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="actor-age">Actor age: </label>
+      <input
+        id="actor-age"
+        class="form-control"
+        formControlName="age"
+        placeholder="Actor age"
+        [readonly]="auth.isCastingAssistance()"
+        [ngClass]="{ 'is-invalid': submitted && f['age'].errors }"
+        type="number"
+        min="0"
+        max="150"
+      />
+      <div *ngIf="f['age'].errors" class="invalid-feedback">
+        <div *ngIf="f['age'].errors['age']">
+          Actor age is greater than 0 and less than 150
+        </div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="actor-gender">Actor gender: </label>
+      <input
+        id="actor-gender"
+        class="form-control"
+        formControlName="gender"
+        [readonly]="auth.isCastingAssistance()"
+        [ngClass]="{ 'is-invalid': submitted && f['gender'].errors }"
+        placeholder="Actor gender"
+      />
+      <div *ngIf="f['gender'].errors" class="invalid-feedback">
+        <div *ngIf="f['gender'].errors['gender']">
+          Actor gender is male or female
+        </div>
+      </div>
+    </div>
+    <p>Form Status: {{ formActor.status }}</p>
+
+    <button type="button" class="btn btn-secondary me-3" (click)="goBack()">
+      go back
+    </button>
+    <button
+      class="btn btn-primary"
+      type="submit"
+      (click)="save()"
+      *ngIf="auth.isCastingDirector() || auth.isExecutiveProducer()"
+    >
+      save
+    </button>
+  </form>
+</div>

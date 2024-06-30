@@ -1,0 +1,24 @@
+<h2>Movies</h2>
+<a
+  class="btn btn-primary"
+  routerLink="/movies/create"
+  *ngIf="auth.isExecutiveProducer()"
+  >Add movie</a
+>
+
+<ul class="movies">
+  <li *ngFor="let movie of movies">
+    <a routerLink="/movies/detail/{{ movie.id }}">
+      <span class="badge">{{ movie.id }}</span> {{ movie.title }}
+    </a>
+    <button
+      type="button"
+      class="delete btn btn-primary"
+      title="delete movie"
+      [hidden]="auth.isCastingAssistance() || auth.isCastingDirector()"
+      (click)="delete(movie)"
+    >
+      x
+    </button>
+  </li>
+</ul>

@@ -1,32 +1,34 @@
+import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
-
-import { Platform } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { AuthService } from './services/auth.service';
+import { RouterModule, RouterOutlet } from '@angular/router';
+import { AuthService } from './user/auth.service';
+import { PageFlowService } from './services/page-flow.service';
 
 @Component({
   selector: 'app-root',
-  templateUrl: 'app.component.html'
+  standalone: true,
+  imports: [RouterOutlet, NgIf, RouterModule],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
   constructor(
-    private auth: AuthService,
-    private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar
+    public auth: AuthService,
+    private pageFlowService: PageFlowService
   ) {
     this.initializeApp();
   }
 
   initializeApp() {
-    this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
+    // Perform required auth actions
+    this.auth.load_jwts();
+    this.auth.check_token_fragment();
 
-      // Perform required auth actions
-      this.auth.load_jwts();
-      this.auth.check_token_fragment();
-    });
+    if (this.auth.isAuthenticated()) this.pageFlowService.next(['/actors']);
+  }
+
+  logout() {
+    this.auth.logout();
+    this.pageFlowService.next(['/logins']);
   }
 }
